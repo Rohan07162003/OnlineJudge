@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import axios from "axios";
 export default function Header() {
-    const { user } = useContext(UserContext);
+    const { user,setUser } = useContext(UserContext);
     const [IsOpen, setIsOpen] = useState(false);
     const [fullIsOpen, setFullIsOpen] = useState(false);
+    const [redirect, setRedirect] = useState(null);
+    
     const toggleNavbar = () => {
         setIsOpen(!IsOpen);
     };
@@ -24,6 +27,8 @@ export default function Header() {
             document.removeEventListener("mousedown", handler);
         }
     });
+
+    
     return (
         <div>
             <header className='p-4 flex justify-between w-full items-center shadow-lg'>
@@ -66,9 +71,9 @@ export default function Header() {
 
                             {fullIsOpen && (
                                 <div className="flex flex-col justify-between absolute top-16 right-28 z-10 bg-white rounded-l drop-shadow-md shadow w-56 dark:bg-gray-700 dark:divide-gray-600">
-                                    <div className="flex block border text-sm px-5 py-2">{user.name}</div>
+                                    <div className="flex block border text-sm px-5 py-2">{user.username}</div>
                                     <Link to={"/"} className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
-                                    <Link to={"/"} className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
+                                    <button className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Logout</button>
                                 </div>
                             )}
                         </button>
