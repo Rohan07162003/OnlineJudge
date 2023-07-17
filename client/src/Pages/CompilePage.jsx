@@ -14,9 +14,15 @@ export default function CompilePage() {
             setOutput(data);
             console.log(data);
 
-        }catch(e){
-            
-            alert('Some Error occured');
+        }catch({response}){
+            if(response){
+                const errMsg=response.data.err.stderr;
+                setOutput(errMsg);
+                console.log(response);
+            }
+            else{
+                setOutput('Error connecting to server');
+            }
         }
     }
     const toggleNavbar = () => {
@@ -74,8 +80,8 @@ export default function CompilePage() {
                         <textarea className="h-96 rounded-md" value={code} onChange={ev => setCode(ev.target.value)}></textarea>
                     </div>
                     <button className="w-20 py-2 mt-1 mb-3 text-white bg-zinc-800 rounded-sm" onClick={handlesubmit}>Run</button>
-                    <div className="bg-white h-40 mb-24 border flex items-center justify-center">
-                        <div className="h-24 w-11/12 bg-yellow-100 opacity-70 p-2">
+                    <div className="bg-white h-52 mb-24 border flex items-center justify-center">
+                        <div className="h-36 w-11/12 bg-yellow-100 opacity-70 p-2 overflow-y-scroll">
                             <p className="text-black text-base">{output}</p>
                         </div>
                     </div>
