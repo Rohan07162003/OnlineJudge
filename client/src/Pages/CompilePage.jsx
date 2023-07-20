@@ -1,26 +1,62 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
+import stubs from "../defaultStubs";
 export default function CompilePage() {
     const [IsOpen, setIsOpen] = useState(false);
-    const [language, setLanguage] = useState('C++');
-    const [code, setCode]=useState('');
-    const [output, setOutput]=useState('');
+    const [language, setLanguage] = useState('cpp');
+    const [code, setCode] = useState('');
+    const [input, setInput] = useState('');
+    const [output, setOutput] = useState('');
+    const [status, setStatus] = useState("");
+    const [jobId, setJobId] = useState("");
     const { user, setUser } = useContext(UserContext);
-    async function handlesubmit(ev){
+    useEffect(() => {
+        setCode(stubs[language]);
+    }, [language]);
+    async function handlesubmit(ev) {
         ev.preventDefault();
-        try{
-            const {data}=await axios.post("/run",{language,code});
-            setOutput(data);
+        try {
+            setJobId("");
+            setStatus("");
+            setOutput("");
+            const { data } = await axios.post("/run", { language, code, input });
             console.log(data);
+            setJobId(data.jobId);
+            let IntervalId;
 
-        }catch({response}){
-            if(response){
-                const errMsg=response.data.err.stderr;
+            IntervalId = setInterval(async () => {
+                const { data: dataRes } = await axios.get("/status", { params: { id: data.jobId } });
+                const { success, job, error } = dataRes;
+                console.log(dataRes);
+                //const {status}=job;
+                //if(status==="success"){
+                //clearInterval(IntervalId);
+                //}
+                if (success) {
+                    const { status: jobStatus, output: jobOutput } = job;
+                    setStatus(jobStatus);
+                    if (jobStatus === "pending") {
+                        return;
+                    }
+                    setOutput(jobOutput);
+                    clearInterval(IntervalId);
+                } else {
+                    setStatus("Error:Please retry!");
+                    console.error(error);
+                    clearInterval(IntervalId);
+                    setOutput(error);
+                }
+                console.log(dataRes);
+            }, 1000);
+
+        } catch ({ response }) {
+            if (response) {
+                const errMsg = response.data.err.stderr;
                 setOutput(errMsg);
                 console.log(response);
             }
-            else{
+            else {
                 setOutput('Error connecting to server');
             }
         }
@@ -54,7 +90,18 @@ export default function CompilePage() {
                     <div className="border mb-0">
                         <button onClick={toggleNavbar} className='mr-20 text-lg px-2 pt-2 pb-1'>
                             <div className="flex gap-2 items-center px-4 p1-2 bg-white shadow">
-                                <div className="text-base py-1 w-12 flex">{language}</div>
+                                <div className="text-base py-1 w-12 flex">
+                                    {language === "c" && (
+                                        <div>C</div>
+                                    )}
+                                    {language === "cpp" && (
+                                        <div>C++</div>
+                                    )}
+                                    {language === "py" && (
+                                        <div>Python</div>
+                                    )}
+
+                                </div>
                                 {!IsOpen && (
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3 h-3 hover:bg-gray-100">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -79,9 +126,22 @@ export default function CompilePage() {
                         </button>
                         <textarea className="h-96 rounded-md" value={code} onChange={ev => setCode(ev.target.value)}></textarea>
                     </div>
-                    <button className="w-20 py-2 mt-1 mb-3 text-white bg-zinc-800 rounded-sm" onClick={handlesubmit}>Run</button>
+                    <button className="w-20 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={handlesubmit}>Run</button>
+                    <div>
+                        <span>Custom Input</span>
+                        <textarea className="h-36 rounded-md border" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
+                    </div>
+                    <div className="px-3 py-1 border">
+                        {{ status } && (
+                            <div className="flex gap-3 ">
+                                <div><span className="font-semibold text-gray-800">Status  </span>  {status}</div>
+                                <div>{jobId && `JobId  ${jobId}`}</div>
+                            </div>
+                        )}
+
+                    </div>
                     <div className="bg-white h-52 mb-24 border flex items-center justify-center">
-                        <div className="h-36 w-11/12 bg-yellow-100 opacity-70 p-2 overflow-y-scroll">
+                        <div className="h-40 w-11/12 bg-yellow-100 opacity-70 p-2 overflow-y-scroll">
                             <p className="text-black text-base">{output}</p>
                         </div>
                     </div>

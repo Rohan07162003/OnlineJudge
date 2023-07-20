@@ -76,30 +76,59 @@ app.get('/profile', (req, res) => {
     }
 })
 app.post('/run', async (req, res) => {
-    const { language, code } = req.body;
+    const { language, code,input } = req.body;
     if (code === undefined || code === "") {
         return res.status(400).json({ success: false, error: "empty code body" })
     }
+    let job;
     try {
         const filePath = await generateFile(language, code);
-        const job=await new Job({language,filePath}).save();
+        job=await new Job({language,filePath}).save();
         const jobId=job["_id"];
         console.log(job);
-        //res.status(201).json({success:true,jobId});
+        res.status(201).json({success:true,jobId});
+        job["startedAt"]=new Date();
         if(language==="py"){
             const output= await executePy(filePath);
-            res.json(output);
-            console.log(output);
+            //res.json({output,filePath});
+            //console.log({filePath,output});
+            job["output"]=output;
         }
         else{
-            const output2= await executeCpp(filePath);
-            console.log(output2);
-            res.json(output2);
+            const output2= await executeCpp(filePath,input);
+            //console.log({filePath,output2});
+            job["output"]=output2;
+            //res.json({output2,filePath});
         }
+        job["finishedAt"]=new Date();
+        job["status"]="success";
+        await job.save();
+        console.log(job);
         
     } catch (err) {
-        res.status(500).json({ err });
-        console.log(err);
+        job["finishedAt"]=new Date();
+        job["status"]="error";
+        job["output"]=JSON.stringify(err);
+        await job.save();
+        //res.status(500).json({ err });
+        console.log(job);
+    }
+})
+app.get("/status", async(req,res)=>{
+    const jobId=req.query.id;
+    console.log("status requested",jobId);
+    if(jobId===undefined){
+        return res.status(400).json({success:false, error:"missing id query"});
+    }
+    //console.log(jobId);
+    try{
+        const job=await Job.findById(jobId);
+        if(job===undefined){
+            return res.status(404).json({success:false,error:"invalid job id"});
+        }
+        res.status(200).json({success: true ,job});
+    }catch(err){
+        return res.status(400).json({success:false,error:JSON.stringify(err)});
     }
 })
 app.post('/logout', (req, res) => {

@@ -11,12 +11,14 @@ const outputpath=path.join(__dirname,'outputs');
 if(!fs.existsSync(outputpath)){
     fs.mkdirSync(outputpath,{recursive:true});
 }
-const executeCpp=(filePath)=>{
+const executeCpp=(filePath,input)=>{
     const jobId=path.basename(filePath).split(".")[0];
     const outpath=path.join(outputpath,`${jobId}.exe`);
+    const inpath=path.join(outputpath,`input.txt`);
+    fs.writeFileSync(inpath,input);
     return new Promise((resolve,reject)=>{
         exec(
-            `g++ ${filePath} -o ${outpath} && cd ${outputpath} && .\\${jobId}.exe`,
+            `g++ ${filePath} -o ${outpath} && cd ${outputpath} && .\\${jobId}.exe < input.txt`,
             (error,stdout,stderr)=>{
                 if(error){
                     reject({error,stderr});
