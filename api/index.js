@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./models/User.js";
 import Job from "./models/Job.js";
+import Problem from "./models/Problems.js"
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
@@ -30,12 +31,13 @@ mongoose.connect(process.env.MONGO_URL);
 
 
 app.post('/register', async (req, res) => {
-    const { name, email, username, password } = req.body;
+    const { name, email, username, role, password } = req.body;
     try {
         const userDoc = await User.create({
             name,
             email,
             username,
+            role,
             password: bcrypt.hashSync(password, bcryptSalt),
         });
         res.json(userDoc);
@@ -68,8 +70,8 @@ app.get('/profile', (req, res) => {
     if (token) {
         jwt.verify(token, jwtSecret, {}, async (err, userData) => {
             if (err) throw err;
-            const { name, email, username, _id } = await User.findById(userData.id);
-            res.json({ name, email, username, _id });
+            const { name, email, username, role, _id } = await User.findById(userData.id);
+            res.json({ name, email, username, role, _id });
         });
     } else {
         res.json(null);
@@ -133,5 +135,30 @@ app.get("/status", async(req,res)=>{
 })
 app.post('/logout', (req, res) => {
     res.cookie('token', '').json(true);
+});
+app.post('/problems',(req,res)=>{
+    const{token} = req.cookies;
+    const {name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput}=req.body;
+    jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
+        if(err) throw err;
+        const problemDoc =await Problem.create({
+            owner:userData.id,
+            name,
+            statement,
+            inputformat,
+            outputformat,
+            sampleInput,
+            sampleOutput,
+            inbuiltinput
+        })
+        res.json(problemDoc);
+    });
+})
+app.get('/problems',async(req,res)=>{
+    res.json( await Problem.find() )
+})
+app.get('/problems/:id',async (req,res)=>{
+    const {id}=req.params;
+    res.json(await Problem.findById(id));
 });
 app.listen(4000);

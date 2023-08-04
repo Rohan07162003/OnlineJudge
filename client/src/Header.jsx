@@ -42,7 +42,7 @@ export default function Header() {
                 <div className=' hidden md:flex justify-end items-center'>
                     <Link to={"/"} className='mr-10 text-base hover:bg-indigo-100 py-2 px-4'>Home</Link>
                     <Link to={"/compile"} className='mr-10 text-base hover:bg-indigo-100 py-2 px-4'>Compile</Link>
-                    <div className='mr-12 text-base hover:bg-indigo-100 py-2 px-4'>Problemset</div>
+                    <Link to={"/problemset"} className='mr-12 text-base hover:bg-indigo-100 py-2 px-4'>Problemset</Link>
                     {!user && (
                         <button className='mr-20 text-lg border border-gray-400 px-4 py-1 text-cyan-700 hover:text-white hover:bg-blue-500'>
                             <Link to={"/login"}>Login</Link>
@@ -72,8 +72,8 @@ export default function Header() {
                             {fullIsOpen && (
                                 <div className="flex flex-col justify-between absolute top-16 right-28 z-10 bg-white rounded-l drop-shadow-md shadow w-56 dark:bg-gray-700 dark:divide-gray-600">
                                     <div className="flex block border text-sm px-5 py-2">{user.username}</div>
-                                    <Link to={"/"} className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
-                                    <button className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Logout</button>
+                                    <Link to={"/account"} className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+                                    <Link to={"/account"} className="flex block text-sm px-5 py-2 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
                                 </div>
                             )}
                         </button>
@@ -92,7 +92,7 @@ export default function Header() {
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
                                         </div>
-                                        <div className="flex block px-2 py-2 ">Account</div>
+                                        <Link to={"/account"} className="flex block px-2 py-2 ">{user.username}</Link>
                                     </div>
 
                                 )}
@@ -101,7 +101,7 @@ export default function Header() {
                                 )}
                                 <Link to={"/"} className="flex block text-gray-900 px-4 py-2 hover:bg-indigo-100 hover:rounded-md dark:hover:bg-gray-600 dark:hover:text-white">Home</Link>
                                 <Link to={"/compile"} className="flex block px-4 py-2 hover:bg-indigo-100 hover:rounded-md dark:hover:bg-gray-600 dark:hover:text-white">Compile</Link>
-                                <div className="flex block px-4 py-2 hover:bg-indigo-100 hover:rounded-md dark:hover:bg-gray-600 dark:hover:text-white">Problemset</div>
+                                <Link to={"/problemset"} className="flex block px-4 py-2 hover:bg-indigo-100 hover:rounded-md dark:hover:bg-gray-600 dark:hover:text-white">Problemset</Link>
                             </div>
                         )}
                     </button>

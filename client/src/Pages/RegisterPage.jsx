@@ -6,6 +6,7 @@ export default function RegisterPage() {
     const [email, setemail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole]= useState('');
     function registerUser(ev) {
         try {
             ev.preventDefault();
@@ -13,6 +14,7 @@ export default function RegisterPage() {
                 name,
                 email,
                 username,
+                role,
                 password
             });
             alert('Registration successful. Now you can log in');
@@ -34,6 +36,9 @@ export default function RegisterPage() {
                     <input type="text" placeholder="Your username"
                         value={username}
                         onChange={ev => setUsername(ev.target.value)} />
+                    <input type="text" placeholder="Your role-eg user"
+                        value={role}
+                        onChange={ev => setRole(ev.target.value)} />
                     <input type="password" placeholder="password"
                         value={password}
                         onChange={ev => setPassword(ev.target.value)} />
