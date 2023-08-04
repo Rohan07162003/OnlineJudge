@@ -16,7 +16,11 @@ const ProblemSchema = new mongoose.Schema({
     inbuiltinput:{
         type: String,
         required: true,
-    } 
+    },
+    inbuiltoutput:{
+        type: String,
+        required: true,
+    }
 })
 const Problem = mongoose.model('Problem',ProblemSchema);
 export default Problem;

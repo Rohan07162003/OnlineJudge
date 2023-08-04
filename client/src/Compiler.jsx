@@ -4,6 +4,8 @@ import axios from "axios";
 import stubs from "./defaultStubs";
 export default function Compiler(props) {
     const inbuiltinput = props.inbuiltinput;
+    const inbuiltoutput = props.inbuiltoutput;
+    const test1output=props.test1output;
     const [IsOpen, setIsOpen] = useState(false);
     const [language, setLanguage] = useState('cpp');
     const [code, setCode] = useState('');
@@ -11,11 +13,15 @@ export default function Compiler(props) {
     const [output, setOutput] = useState('');
     const [status, setStatus] = useState('');
     const [jobId, setJobId] = useState('');
+    const [input2,setInput2] = useState('');
     const { user, setUser } = useContext(UserContext);
+    var f=0;
     useEffect(() => {
         setCode(stubs[language]);
     }, [language]);
+    
     async function handlerun(ev) {
+        f=1;
         ev.preventDefault();
         try {
             setJobId("");
@@ -63,12 +69,15 @@ export default function Compiler(props) {
         }
     }
     async function handlesubmit(ev) {
+        
         ev.preventDefault();
         try {
+            
             setJobId("");
             setStatus("");
             setOutput("");
-            const { data } = await axios.post("/run", { language, code, inbuiltinput });
+            setInput2(inbuiltinput);
+            const { data } = await axios.post("/submit", { language, code, input2 });
             console.log(data);
             setJobId(data.jobId);
             let IntervalId;
@@ -89,6 +98,14 @@ export default function Compiler(props) {
                     }
                     setOutput(jobOutput);
                     clearInterval(IntervalId);
+                    console.log(jobOutput);
+                    console.log(inbuiltoutput);
+                    if(jobOutput.trim() === inbuiltoutput.trim()){
+                        setStatus("accepted!")
+                    }
+                    else{
+                        setStatus("Wrong answer on test case 2")
+                    }
                 } else {
                     setStatus("Error:Please retry!");
                     console.error(error);
@@ -96,6 +113,7 @@ export default function Compiler(props) {
                     setOutput(error);
                 }
                 console.log(dataRes);
+                
             }, 1000);
 
         } catch ({ response }) {
@@ -197,7 +215,6 @@ export default function Compiler(props) {
                             </div>
                         </div>
                     )}
-                    {inbuiltinput}
                 </div>
             </div>
         </div>
@@ -205,4 +222,5 @@ export default function Compiler(props) {
 }
 Compiler.defaultProps = {
     inbuiltinput: "no input",
+    
 }

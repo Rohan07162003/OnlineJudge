@@ -116,6 +116,45 @@ app.post('/run', async (req, res) => {
         console.log(job);
     }
 })
+app.post('/submit', async (req, res) => {
+    const { language, code,input2 } = req.body;
+    if (code === undefined || code === "") {
+        return res.status(400).json({ success: false, error: "empty code body" })
+    }
+    let job;
+    try {
+        const filePath = await generateFile(language, code);
+        job=await new Job({language,filePath}).save();
+        const jobId=job["_id"];
+        console.log(job);
+        res.status(201).json({success:true,jobId});
+        job["startedAt"]=new Date();
+        if(language==="py"){
+            const output= await executePy(filePath);
+            //res.json({output,filePath});
+            //console.log({filePath,output});
+            job["output"]=output;
+        }
+        else{
+            const output2= await executeCpp(filePath,input2);
+            //console.log({filePath,output2});
+            job["output"]=output2;
+            //res.json({output2,filePath});
+        }
+        job["finishedAt"]=new Date();
+        job["status"]="success";
+        await job.save();
+        console.log(job);
+        
+    } catch (err) {
+        job["finishedAt"]=new Date();
+        job["status"]="error";
+        job["output"]=JSON.stringify(err);
+        await job.save();
+        //res.status(500).json({ err });
+        console.log(job);
+    }
+})
 app.get("/status", async(req,res)=>{
     const jobId=req.query.id;
     console.log("status requested",jobId);
@@ -138,7 +177,7 @@ app.post('/logout', (req, res) => {
 });
 app.post('/problems',(req,res)=>{
     const{token} = req.cookies;
-    const {name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput}=req.body;
+    const {name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput}=req.body;
     jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
         if(err) throw err;
         const problemDoc =await Problem.create({
@@ -149,7 +188,8 @@ app.post('/problems',(req,res)=>{
             outputformat,
             sampleInput,
             sampleOutput,
-            inbuiltinput
+            inbuiltinput,
+            inbuiltoutput
         })
         res.json(problemDoc);
     });

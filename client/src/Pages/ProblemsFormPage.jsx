@@ -9,13 +9,14 @@ export default function ProblemsFormPage() {
     const [inputformat, setInputformat] = useState('');
     const [outputformat, setOutputformat] = useState('');
     const [inbuiltinput, setInbuiltinput] = useState('');
+    const [inbuiltoutput, setInbuiltoutput] = useState('');
     const [redirect, setRedirect] = useState(false);
 
 
     async function saveProb(ev) {
         ev.preventDefault();
         try {
-            const data = { name, statement,inputformat,outputformat, sampleInput, sampleOutput,inbuiltinput };
+            const data = { name, statement,inputformat,outputformat, sampleInput, sampleOutput,inbuiltinput,inbuiltoutput };
             await axios.post('/problems', data);
             setRedirect(true);
         } catch (e) {
@@ -46,6 +47,8 @@ export default function ProblemsFormPage() {
                 <textarea placeholder="output" className="h-48 md:h-32 " value={sampleOutput} onChange={ev => setSampleoutput(ev.target.value)}></textarea>
                 <h2 className="text-2xl mt-4">Test Case 2</h2>
                 <textarea placeholder="2nd test case" className="h-48 md:h-32 " value={inbuiltinput} onChange={ev => setInbuiltinput(ev.target.value)}></textarea>
+                <h2 className="text-2xl mt-4">Test Case 2 Output</h2>
+                <textarea placeholder="2nd test case" className="h-48 md:h-32 " value={inbuiltoutput} onChange={ev => setInbuiltoutput(ev.target.value)}></textarea>
                 <button className="primary my-4 hover:bg-opacity-95">Save</button>
             </form>
         </div>
