@@ -30,7 +30,7 @@ function App() {
           <Route path="/problemset/new" element={<ProblemsFormPage/>} />
           <Route path="/problem/:id" element={<ProblemPage/>} />
           <Route path="/account" element={<ProfilePage/>} />
-          <Route path="/submissions" element={<SubmissionsPage/>} />
+          <Route path="/submission" element={<SubmissionsPage/>} />
         </Route>
       </Routes>
     </UserContextProvider>

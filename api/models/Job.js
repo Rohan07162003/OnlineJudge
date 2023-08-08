@@ -26,7 +26,7 @@ const JobSchema= new Schema({
     status:{
         type:String,
         default:"pending",
-        enum:["pending","success","error"],
+        enum:["pending","success","error","accepted","Wrong answer on test case 2"],
     }
 });
 

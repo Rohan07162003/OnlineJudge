@@ -52,7 +52,7 @@ export default function ProblemPage() {
                     </div>
                 </div>
                 <div>
-                    <Compiler inbuiltinput={prob.inbuiltinput} inbuiltoutput={prob.inbuiltoutput} test1output={prob.sampleOutput}/>
+                    <Compiler inbuiltinput={prob.inbuiltinput} inbuiltoutput={prob.inbuiltoutput} test1output={prob.sampleOutput} problemname={prob.name}/>
                 </div>
             </div>
         </div>

@@ -1,27 +1,37 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "./UserContext";
+import { Navigate } from "react-router-dom";
 import axios from "axios";
 import stubs from "./defaultStubs";
 export default function Compiler(props) {
     const inbuiltinput = props.inbuiltinput;
     const inbuiltoutput = props.inbuiltoutput;
-    const test1output=props.test1output;
+    const test1output = props.test1output;
+    const name = props.problemname;
+    const [owner,setOwner]= useState('');
     const [IsOpen, setIsOpen] = useState(false);
     const [language, setLanguage] = useState('cpp');
+    const [result,setResult]= useState('running');
     const [code, setCode] = useState('');
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
     const [status, setStatus] = useState('');
     const [jobId, setJobId] = useState('');
-    const [input2,setInput2] = useState('');
+    const [input2, setInput2] = useState('');
+    const [submittedAt, setSubmittedAt] = useState('');
     const { user, setUser } = useContext(UserContext);
-    var f=0;
+    const [redirect, setRedirect] = useState(false);
+    var f = 0;
     useEffect(() => {
         setCode(stubs[language]);
     }, [language]);
-    
+    useEffect(()=>{
+        if(result === "Accepted!" || result === "Wrong answer on test case 2") {
+            saveProb();
+        }
+    },[result])
     async function handlerun(ev) {
-        f=1;
+        f = 1;
         ev.preventDefault();
         try {
             setJobId("");
@@ -42,6 +52,7 @@ export default function Compiler(props) {
                 //}
                 if (success) {
                     const { status: jobStatus, output: jobOutput } = job;
+
                     setStatus(jobStatus);
                     if (jobStatus === "pending") {
                         return;
@@ -68,64 +79,107 @@ export default function Compiler(props) {
             }
         }
     }
-    async function handlesubmit(ev) {
-        
-        ev.preventDefault();
+    async function saveProb() {
+        //e.preventDefault();
         try {
-            
-            setJobId("");
-            setStatus("");
-            setOutput("");
-            setInput2(inbuiltinput);
-            const { data } = await axios.post("/submit", { language, code, input2 });
-            console.log(data);
-            setJobId(data.jobId);
-            let IntervalId;
+            const data = {
+                owner,
+                name,
+                language,
+                result,
+                submittedAt,
+            };
+            await axios.post('/submissions', data);
+            setRedirect(true);
+        } catch (e) {
+            alert("An error occurred");
+            console.log(e.message);
+        }
 
-            IntervalId = setInterval(async () => {
-                const { data: dataRes } = await axios.get("/status", { params: { id: data.jobId } });
-                const { success, job, error } = dataRes;
-                console.log(dataRes);
-                //const {status}=job;
-                //if(status==="success"){
-                //clearInterval(IntervalId);
-                //}
-                if (success) {
-                    const { status: jobStatus, output: jobOutput } = job;
-                    setStatus(jobStatus);
-                    if (jobStatus === "pending") {
-                        return;
+    }
+    async function handlesubmit(ev) {
+
+        ev.preventDefault();
+        if(user){
+            setOwner(user.username); 
+
+            try {
+
+                setJobId("");
+                setStatus("");
+                setOutput("");
+                setSubmittedAt(new Date());
+                setInput2(inbuiltinput);
+                const { data } = await axios.post("/submit", { language, code, input2 });
+                console.log(data);
+                setJobId(data.jobId);
+                let IntervalId;
+
+                IntervalId = setInterval(async () => {
+                    const { data: dataRes } = await axios.get("/status", { params: { id: data.jobId } });
+                    const { success, job, error } = dataRes;
+                    console.log(dataRes);
+                    //const {status}=job;
+                    //if(status==="success"){
+                    //clearInterval(IntervalId);
+                    //}
+                    if (success) {
+                        const { status: jobStatus, output: jobOutput } = job;
+                        setStatus(jobStatus);
+                        if (jobStatus === "pending") {
+                            return;
+                        }
+                        setOutput(jobOutput);
+                        clearInterval(IntervalId);
+                        console.log(inbuiltoutput);
+                        console.log(status);
+                        console.log(submittedAt);
+                        if (jobOutput.trim() === inbuiltoutput.trim()) {
+                            setResult("Accepted!");
+                            setStatus("Accepted");
+                            console.log(result);
+                            console.log(submittedAt);
+                        }
+                        else {
+                            
+                            console.log(submittedAt);
+                            setResult("Wrong answer on test case 2");
+                            setStatus("Wrong answer on test case 2");
+                            console.log(result);
+                            
+                        }
+                        
+
+                    } else {
+                        setStatus("Error:Please retry!");
+                        console.error(error);
+                        clearInterval(IntervalId);
+                        setOutput(error);
                     }
-                    setOutput(jobOutput);
-                    clearInterval(IntervalId);
-                    console.log(jobOutput);
-                    console.log(inbuiltoutput);
-                    if(jobOutput.trim() === inbuiltoutput.trim()){
-                        setStatus("accepted!")
-                    }
-                    else{
-                        setStatus("Wrong answer on test case 2")
-                    }
-                } else {
-                    setStatus("Error:Please retry!");
-                    console.error(error);
-                    clearInterval(IntervalId);
-                    setOutput(error);
+                    console.log(dataRes);
+
+                }, 1000);
+
+            } catch ({ response }) {
+                if (response) {
+                    const errMsg = response.data.err.stderr;
+                    setOutput(errMsg);
+                    console.log(response);
                 }
-                console.log(dataRes);
-                
-            }, 1000);
-
-        } catch ({ response }) {
-            if (response) {
-                const errMsg = response.data.err.stderr;
-                setOutput(errMsg);
-                console.log(response);
-            }
-            else {
-                setOutput('Error connecting to server');
+                else {
+                    setOutput('Error connecting to server');
+                }
             }
         }
+        else{
+            !user(
+                alert("Login to submit answer")
+            )
+        }
+
+    }
+    if (redirect) {
+        return <Navigate to={'/submission'} />
     }
     const toggleNavbar = () => {
         setIsOpen(!IsOpen);
@@ -215,6 +269,8 @@ export default function Compiler(props) {
                             </div>
                         </div>
                     )}
+                    {/*<button className="w-24 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={saveProb}>Submissions</button>*/}
+                    
                 </div>
             </div>
         </div>
@@ -222,5 +278,5 @@ export default function Compiler(props) {
 }
 Compiler.defaultProps = {
     inbuiltinput: "no input",
-    
+
 }

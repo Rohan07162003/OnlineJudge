@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import User from "./models/User.js";
 import Job from "./models/Job.js";
 import Problem from "./models/Problems.js"
+import Submission from "./models/Submissions.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
@@ -194,11 +195,73 @@ app.post('/problems',(req,res)=>{
         res.json(problemDoc);
     });
 })
+app.post('/submissions',async(req,res)=>{
+    const { owner,name,language,result,submittedAt} = req.body;
+    try {
+        
+        const userSub = await Submission.create({
+            owner,
+            name,
+            language,
+            result,
+            submittedAt,
+        });
+        res.json(userSub);
+    } catch (e) {
+        res.status(422).json(e)
+    }
+})
 app.get('/problems',async(req,res)=>{
     res.json( await Problem.find() )
 })
+app.get('/submissions',async(req,res)=>{
+    res.json( await Submission.find() )
+})
+/*
+exports.loadSubmissionsByProblemname = async (req, res) => {
+    const problemID = req.params.id
+    try {
+        const problem = await Problem.findOne({name: problemID});
+        if(problem == undefined) {
+            return res.status(404).json({
+                result: "fail",
+                message: "no such problem exists"
+            })
+        }
+        const submissions = await Submission.find({problemID: problemID});
+        return res.status(200).json(submissions)
+        
+    }
+    catch(e) {
+        console.log(e.message);
+        return res.status(404).json({
+            result: "fail",
+            message: "fetching submissions failed"
+        })
+    }
+}
+app.get('/problemsubmissions', async (req, res) => {
+    try {
+        const { name } = req.query;
+        const problem = await Problem.findOne({name: name});
+        if(problem == undefined) {
+            return res.status(404).json({
+                result: "fail",
+                message: "no such problem exists"
+            })
+        }
+        const submissions = await Submission.find({name:});
+
+        res.json(submissions);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while fetching submissions.' });
+    }
+});
+*/
 app.get('/problems/:id',async (req,res)=>{
     const {id}=req.params;
     res.json(await Problem.findById(id));
 });
+
 app.listen(4000);
