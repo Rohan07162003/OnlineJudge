@@ -28,10 +28,15 @@ export default function ProblemPage() {
 
                 <h1 className="text-2xl font-semibold">{prob.name}</h1>
             </div>
-
-            <div className="mb-4 grid grod-cols-1 md:grid-cols-2 gap-2 ml-12">
+            <div className="w-1/4">
+                <div className="flex justify-start gap-14 ml-12 text-gray-500">
+                    <h2 className="text-base font-semibold border-b-2 border-primary py-2 px-4">Statement</h2>
+                    <Link to={"/submission/"+id}className="text-base font-semibold py-2 px-4">Submissions</Link>
+                </div>
+            </div>
+            <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-2 ml-12">
                 <div className="max-h-screen overflow-y-auto">
-                    <h1 className="text-2xl font-semibold py-2">Problem</h1>
+                    <h1 className="text-2xl font-semibold pt-3 pb-2">Problem</h1>
                     {prob.statement}
                     <h1 className="text-2xl font-semibold py-2">Input Format</h1>
                     {prob.inputformat}
@@ -52,7 +57,7 @@ export default function ProblemPage() {
                     </div>
                 </div>
                 <div>
-                    <Compiler inbuiltinput={prob.inbuiltinput} inbuiltoutput={prob.inbuiltoutput} test1output={prob.sampleOutput} problemname={prob.name}/>
+                    <Compiler inbuiltinput={prob.inbuiltinput} inbuiltoutput={prob.inbuiltoutput} test1output={prob.sampleOutput} problemname={prob.name} problemid={id} />
                 </div>
             </div>
         </div>

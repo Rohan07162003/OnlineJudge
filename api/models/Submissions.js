@@ -6,6 +6,7 @@ const SubmissionSchema = new mongoose.Schema({
     name: {
         type: String,  
     },
+    problemid:String,
     language:String,
     result:String,
     submittedAt:String,

@@ -1,5 +1,9 @@
 {
   "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -10,5 +14,8 @@
     "mongoose": "^7.3.4",
     "react-scripts": "^5.0.1",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

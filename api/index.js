@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
     if (UserDocument) {
         const passOk = bcrypt.compareSync(password, UserDocument.password);
         if (passOk) {
-            jwt.sign({ email: UserDocument.email, id: UserDocument._id }, jwtSecret, {}, (err, token) => {
+            jwt.sign({ email: UserDocument.email, id: UserDocument._id,username:  UserDocument.username}, jwtSecret, {}, (err, token) => {
                 if (err) throw err;
                 res.cookie('token', token).json(UserDocument);
             })
@@ -196,7 +196,7 @@ app.post('/problems',(req,res)=>{
     });
 })
 app.post('/submissions',async(req,res)=>{
-    const { owner,name,language,result,submittedAt} = req.body;
+    const { owner,name,language,result,submittedAt,problemid} = req.body;
     try {
         
         const userSub = await Submission.create({
@@ -205,6 +205,7 @@ app.post('/submissions',async(req,res)=>{
             language,
             result,
             submittedAt,
+            problemid
         });
         res.json(userSub);
     } catch (e) {
@@ -217,6 +218,27 @@ app.get('/problems',async(req,res)=>{
 app.get('/submissions',async(req,res)=>{
     res.json( await Submission.find() )
 })
+app.get('/user-submissions',async(req,res)=>{
+    const{token} = req.cookies;
+    jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
+        const {username} =userData;
+        //console.log(userData);
+        res.json(await Submission.find({owner:username}));
+    });
+});
+app.get('/user-problemsubmissions',async(req,res)=>{
+    const probid=req.query.id;
+    const{token} = req.cookies;
+    jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
+        const {username} =userData;
+        //console.log(userData);
+        res.json(await Submission.find({owner:username,problemid:probid}));
+    });
+});
+app.get('/problemsubmissions',async(req,res)=>{
+    const probid=req.query.id;
+    res.json(await Submission.find({problemid:probid}));
+});
 /*
 exports.loadSubmissionsByProblemname = async (req, res) => {
     const problemID = req.params.id
@@ -263,5 +285,9 @@ app.get('/problems/:id',async (req,res)=>{
     const {id}=req.params;
     res.json(await Problem.findById(id));
 });
-
-app.listen(4000);
+app.get('/',(req,res)=>{
+    res.send("<h4>HI,this App is running on Updated Docker Container</h4>");
+})
+app.listen(4000,()=>{
+    console.log("Server is listening on port 4000!");
+});

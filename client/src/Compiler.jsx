@@ -7,6 +7,7 @@ export default function Compiler(props) {
     const inbuiltinput = props.inbuiltinput;
     const inbuiltoutput = props.inbuiltoutput;
     const test1output = props.test1output;
+    const problemid=props.problemid;
     const name = props.problemname;
     const [owner,setOwner]= useState('');
     const [IsOpen, setIsOpen] = useState(false);
@@ -88,6 +89,7 @@ export default function Compiler(props) {
                 language,
                 result,
                 submittedAt,
+                problemid,
             };
             await axios.post('/submissions', data);
             setRedirect(true);
@@ -251,6 +253,7 @@ export default function Compiler(props) {
                     </div>
                     <div>
                         <span>Custom Input</span>
+                        
                         <textarea className="h-36 rounded-md border" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
                     </div>
                     <div className="px-3 py-1 border">

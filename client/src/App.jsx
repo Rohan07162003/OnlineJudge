@@ -11,6 +11,7 @@ import ProfilePage from './Pages/ProfilePage'
 import ProblemsFormPage from './Pages/ProblemsFormPage'
 import ProblemPage from './Pages/ProblemPage'
 import SubmissionsPage from './Pages/SubmissionsPage'
+import UserProblemSubmission from './Pages/UserProblemSubmissions'
 import axios from 'axios'
 import { UserContextProvider } from './UserContext'
 axios.defaults.baseURL = 'http://localhost:4000';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/problem/:id" element={<ProblemPage/>} />
           <Route path="/account" element={<ProfilePage/>} />
           <Route path="/submission" element={<SubmissionsPage/>} />
+          <Route path="/submission/:id" element={<UserProblemSubmission/>} />
         </Route>
       </Routes>
     </UserContextProvider>
