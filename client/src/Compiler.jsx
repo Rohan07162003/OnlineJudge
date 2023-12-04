@@ -1,18 +1,24 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "./UserContext";
 import { Navigate } from "react-router-dom";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { githubDark} from "@uiw/codemirror-theme-github";
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { languages } from '@codemirror/language-data';
 import axios from "axios";
 import stubs from "./defaultStubs";
 export default function Compiler(props) {
+    const code1 = "console.log('Code Mirror!');"
     const inbuiltinput = props.inbuiltinput;
     const inbuiltoutput = props.inbuiltoutput;
     const test1output = props.test1output;
-    const problemid=props.problemid;
+    const problemid = props.problemid;
     const name = props.problemname;
-    const [owner,setOwner]= useState('');
+    const [owner, setOwner] = useState('');
     const [IsOpen, setIsOpen] = useState(false);
     const [language, setLanguage] = useState('cpp');
-    const [result,setResult]= useState('running');
+    const [result, setResult] = useState('running');
     const [code, setCode] = useState('');
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
@@ -26,11 +32,11 @@ export default function Compiler(props) {
     useEffect(() => {
         setCode(stubs[language]);
     }, [language]);
-    useEffect(()=>{
-        if(result === "Accepted!" || result === "Wrong answer on test case 2") {
+    useEffect(() => {
+        if (result === "Accepted!" || result === "Wrong answer on test case 2") {
             saveProb();
         }
-    },[result])
+    }, [result])
     async function handlerun(ev) {
         f = 1;
         ev.preventDefault();
@@ -102,8 +108,8 @@ export default function Compiler(props) {
     async function handlesubmit(ev) {
 
         ev.preventDefault();
-        if(user){
-            setOwner(user.username); 
+        if (user) {
+            setOwner(user.username);
 
             try {
 
@@ -143,14 +149,14 @@ export default function Compiler(props) {
                             console.log(submittedAt);
                         }
                         else {
-                            
+
                             console.log(submittedAt);
                             setResult("Wrong answer on test case 2");
                             setStatus("Wrong answer on test case 2");
                             console.log(result);
-                            
+
                         }
-                        
+
 
                     } else {
                         setStatus("Error:Please retry!");
@@ -173,7 +179,7 @@ export default function Compiler(props) {
                 }
             }
         }
-        else{
+        else {
             !user(
                 alert("Login to submit answer")
             )
@@ -245,7 +251,12 @@ export default function Compiler(props) {
                                 </div>
                             )}
                         </button>
-                        <textarea className="h-96 rounded-md" value={code} onChange={ev => setCode(ev.target.value)}></textarea>
+                        <CodeMirror
+                            theme={vscodeDark}
+                            extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
+                            className="h-96 rounded-md max-h-96 overflow-y-auto" value={code} onChange={(newValue) => setCode(newValue)}
+                        />
+                        
                     </div>
                     <div className="flex gap-4">
                         <button className="w-24 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={handlerun}>Run</button>
@@ -253,9 +264,10 @@ export default function Compiler(props) {
                     </div>
                     <div>
                         <span>Custom Input</span>
-                        
+
                         <textarea className="h-36 rounded-md border" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
                     </div>
+
                     <div className="px-3 py-1 border">
                         {!!status && (
                             <div className="flex gap-3 ">
@@ -273,7 +285,7 @@ export default function Compiler(props) {
                         </div>
                     )}
                     {/*<button className="w-24 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={saveProb}>Submissions</button>*/}
-                    
+
                 </div>
             </div>
         </div>

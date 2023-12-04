@@ -1,11 +1,22 @@
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
 import Compiler from "../Compiler";
+import ProblemSubs from "../ProblemSubs.jsx";
+import ProblemComp from "../ProblemComp.jsx";
+
 export default function ProblemPage() {
     const { id } = useParams();
     const [prob, setProb] = useState(null);
-
+    const [subs, setsubs] = useState([]);
+    const [subson, setSubson] = useState('prob');
+    const { user } = useContext(UserContext);
+    useEffect(() => {
+        axios.get('/problemsubmissions', { params: { id: id } }).then(({ data }) => {
+            setsubs(data);
+        });
+    }, []);
     useEffect(() => {
         if (!id) {
             return;
@@ -30,32 +41,22 @@ export default function ProblemPage() {
             </div>
             <div className="w-1/4">
                 <div className="flex justify-start gap-14 ml-12 text-gray-500">
-                    <h2 className="text-base font-semibold border-b-2 border-primary py-2 px-4">Statement</h2>
-                    <Link to={"/submission/"+id}className="text-base font-semibold py-2 px-4">Submissions</Link>
+                    <button onClick={() => setSubson("prob")} className={`text-base font-semibold py-2 px-4 ${subson === "prob" ? "border-b-2 border-primary" : ""
+                        }`}>Statement</button>
+                    <button onClick={() => setSubson("sub")} className={`text-base font-semibold py-2 px-4 ${subson === "sub" ? "border-b-2 border-primary" : ""
+                        }`}>Submissions</button>
+                    {!!user && (user.role.toLowerCase() === "problemsetter") && (
+                        <Link to={"/setproblem/" + id} className="text-base font-semibold py-2 px-4">Edit</Link>
+                    )}
                 </div>
             </div>
-            <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-2 ml-12">
-                <div className="max-h-screen overflow-y-auto">
-                    <h1 className="text-2xl font-semibold pt-3 pb-2">Problem</h1>
-                    {prob.statement}
-                    <h1 className="text-2xl font-semibold py-2">Input Format</h1>
-                    {prob.inputformat}
-                    <h1 className="text-2xl font-semibold py-2">Output Format</h1>
-                    {prob.outputformat}
-                    <h1 className="text-xl font-semibold py-2">Examples</h1>
-                    <div className="bg-slate-200 grid grid-cols-2 divide-x divide-slate-400">
-                        <div className="px-4 py-2">
-                            <h3 className="py-1">Input</h3>
-                            <div className="max-h-60 overflow-y-auto">
-                                {sampleInputLines.map((line, index) => <p key={index}>{line}</p>)}
-                            </div>
-                        </div>
-                        <div className="px-4 py-2">
-                            <h3 className="py-1">Output</h3>
-                            {sampleOutputLines.map((line, index) => <p key={index}>{line}</p>)}
-                        </div>
-                    </div>
-                </div>
+            <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-2 ml-3 mr-2 md:ml-12">
+                {subson === 'prob' && (
+                    <ProblemComp prob={prob} />
+                )}
+                {subson === 'sub' && (
+                    <ProblemSubs subs={subs} />
+                )}
                 <div>
                     <Compiler inbuiltinput={prob.inbuiltinput} inbuiltoutput={prob.inbuiltoutput} test1output={prob.sampleOutput} problemname={prob.name} problemid={id} />
                 </div>

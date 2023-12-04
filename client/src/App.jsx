@@ -28,7 +28,8 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/compile" element={<CompilePage/>} />
           <Route path="/problemset" element={<ProblemSetPage/>} />
-          <Route path="/problemset/new" element={<ProblemsFormPage/>} />
+          <Route path="/setproblem/new" element={<ProblemsFormPage/>} />
+          <Route path="/setproblem/:id" element={<ProblemsFormPage/>} />
           <Route path="/problem/:id" element={<ProblemPage/>} />
           <Route path="/account" element={<ProfilePage/>} />
           <Route path="/submission" element={<SubmissionsPage/>} />

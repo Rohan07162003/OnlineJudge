@@ -2,6 +2,12 @@ import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 import stubs from "../defaultStubs";
+import CodeMirror from "@uiw/react-codemirror";
+import { vscodeDark } from "@uiw/codemirror-theme-vscode";
+import { githubLight} from "@uiw/codemirror-theme-github";
+import { solarizedDark, solarizedLight} from "@uiw/codemirror-theme-solarized";
+import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { languages } from '@codemirror/language-data';
 export default function CompilePage() {
     const [IsOpen, setIsOpen] = useState(false);
     const [language, setLanguage] = useState('cpp');
@@ -124,7 +130,12 @@ export default function CompilePage() {
                                 </div>
                             )}
                         </button>
-                        <textarea className="h-96 rounded-md" value={code} onChange={ev => setCode(ev.target.value)}></textarea>
+                        
+                        <CodeMirror
+                            theme={solarizedLight}
+                            extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
+                            className="h-96 rounded-md max-h-96 overflow-y-auto" value={code} onChange={(newValue) => setCode(newValue)}
+                        />
                     </div>
                     <button className="w-20 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={handlesubmit}>Run</button>
                     <div>

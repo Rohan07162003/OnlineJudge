@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
-import { Navigate } from "react-router-dom";
+import { Navigate,useParams } from "react-router-dom";
 export default function ProblemsFormPage() {
+    const {id}=useParams();
     const [name, setName] = useState('');
     const [statement, setStatement] = useState('');
     const [sampleInput, setSampleinput] = useState('');
@@ -11,18 +12,36 @@ export default function ProblemsFormPage() {
     const [inbuiltinput, setInbuiltinput] = useState('');
     const [inbuiltoutput, setInbuiltoutput] = useState('');
     const [redirect, setRedirect] = useState(false);
-
-
+    useEffect(()=>{
+        if(!id)return;
+        axios.get('/problems/'+id).then(response=>{
+            const {data}=response;
+            setName(data.name);
+            setStatement(data.statement);
+            setSampleinput(data.sampleInput);
+            setSampleoutput(data.sampleOutput);
+            setInputformat(data.inputformat);
+            setOutputformat(data.outputformat);
+            setInbuiltinput(data.inbuiltinput);
+            setInbuiltoutput(data.inbuiltoutput);
+        })
+    },[id])
     async function saveProb(ev) {
         ev.preventDefault();
-        try {
-            const data = { name, statement,inputformat,outputformat, sampleInput, sampleOutput,inbuiltinput,inbuiltoutput };
-            await axios.post('/problems', data);
+        const problemdata={name, statement,inputformat,outputformat, sampleInput, sampleOutput,inbuiltinput,inbuiltoutput}
+        if(id){
+            try {
+                await axios.put('/problems', {id,...problemdata});
+                setRedirect(true);
+            } catch (e) {
+                alert("An error occurred1");
+                console.log(e.message);
+            }
+        }else{
+            await axios.post('/problems', problemdata);
             setRedirect(true);
-        } catch (e) {
-            alert("An error occurred");
-            console.log(e.message);
         }
+        
         console.log("inside function");
     }
     if(redirect){
@@ -31,7 +50,7 @@ export default function ProblemsFormPage() {
     
     return (
 
-        <div className="mt-8">
+        <div className="mt-8 px-2">
             <form onSubmit={saveProb}>
                 <h2 className="text-2xl mt-4">Problem</h2>
                 <input type="text" placeholder="problem name" value={name} onChange={ev => setName(ev.target.value)} />

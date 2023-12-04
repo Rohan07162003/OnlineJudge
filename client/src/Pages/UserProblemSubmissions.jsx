@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { UserContext } from "../UserContext";
 import Compiler from "../Compiler";
 function formatDateTimeWithDefaultTimeZone(inputDateStr) {
     const monthNames = [
@@ -26,6 +27,7 @@ export default function UserProblemSubmission() {
     const { id } = useParams();
     const [prob, setProb] = useState(null);
     const [subs, setsubs] = useState([]);
+    const { user,ready } = useContext(UserContext);
     useEffect(() => {
         axios.get('/problemsubmissions', { params: { id: id } }).then(({ data }) => {
             setsubs(data);
@@ -40,7 +42,9 @@ export default function UserProblemSubmission() {
             setProb(response.data);
         });
     }, [id])
-
+    if (!ready) {
+        return 'Loading..';
+    }
 
 
     //const { data: dataRes } = await axios.get("/status", { params: { id: data.jobId } });
@@ -60,6 +64,9 @@ export default function UserProblemSubmission() {
                 <div className="flex justify-start gap-14 ml-12 text-gray-500">
                     <Link to={'/problem/' + id} className="text-base font-semibold py-2 px-4">Statement</Link>
                     <h2 className="text-base font-semibold border-b-2 border-primary py-2 px-4">Submissions</h2>
+                    {!!user && (user.role.toLowerCase() === "problemsetter") && (
+                        <Link to={"/setproblem/"+id}className="text-base font-semibold py-2 px-4">Edit</Link>
+                    )}
                 </div>
             </div>
             <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-2 mx-5 mt-2">

@@ -21,7 +21,7 @@ export default function ProblemSetPage() {
         <div className="my-12">
             {!!user && (user.role.toLowerCase() === "problemsetter") && (
                 <div className="mx-32">
-                    <Link className="inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full hover:bg-opacity-95" to={'/problemset/new'}>
+                    <Link className="inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full hover:bg-opacity-95" to={'/setproblem/new'}>
                         Set Problems
                     </Link>
                 </div>
