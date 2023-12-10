@@ -74,10 +74,10 @@ export const Hero = () => {
                             </div>
 
                             {fullIsOpen && (
-                                <div className="flex flex-col justify-between absolute top-16 right-28 z-10 bg-white rounded-l drop-shadow-md shadow w-56 dark:bg-gray-700 dark:divide-gray-600">
-                                    <div className="flex block border text-sm px-5 py-2">{user.username}</div>
-                                    <Link to={"/account"} className="flex block text-sm px-5 py-2 font-poppins hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
-                                    <Link to={"/account"} className="flex block text-sm px-5 py-2 font-poppins hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Logout</Link>
+                                <div className="flex flex-col justify-between absolute top-16 right-0 z-10 rounded-l drop-shadow-md shadow w-56 dark:bg-gray-700 dark:divide-gray-600">
+                                    <div className="flex block text-sm pl-8 py-2">{user.username}</div>
+                                    <Link to={"/account"} className="flex block text-sm pl-8 py-2 font-poppins hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+                        
                                 </div>
                             )}
                         </button>
@@ -91,7 +91,7 @@ export const Hero = () => {
                         {IsOpen && (
                             <div className="flex flex-col justify-between text-sm absolute top-12 right-0 z-10 rounded-xl drop-shadow-md shadow w-40 dark:bg-gray-700 dark:divide-gray-600" >
                                 {user && (
-                                    <div className="flex items-center hover:bg-indigo-100 hover:rounded-md dark:hover:bg-gray-600 dark:hover:text-white">
+                                    <div className="flex items-center hover:rounded-md dark:hover:bg-gray-600 dark:hover:text-white">
                                         <div className="pl-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>

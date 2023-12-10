@@ -118,7 +118,7 @@ app.post('/run', async (req, res) => {
     }
 })
 app.post('/submit', async (req, res) => {
-    const { language, code,input2 } = req.body;
+    const { language, code,input } = req.body;
     if (code === undefined || code === "") {
         return res.status(400).json({ success: false, error: "empty code body" })
     }
@@ -137,7 +137,7 @@ app.post('/submit', async (req, res) => {
             job["output"]=output;
         }
         else{
-            const output2= await executeCpp(filePath,input2);
+            const output2= await executeCpp(filePath,input);
             //console.log({filePath,output2});
             job["output"]=output2;
             //res.json({output2,filePath});
@@ -193,6 +193,19 @@ app.post('/problems',(req,res)=>{
             inbuiltoutput
         })
         res.json(problemDoc);
+    });
+})
+app.put('/problems',async(req,res)=>{
+    const{token} = req.cookies;
+    const {id,name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput}=req.body;
+    jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
+        const ProbDoc=await Problem.findById(id)
+        if(err) throw err;
+        if(userData.id=== ProbDoc.owner.toString()){
+            ProbDoc.set({name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput});
+            await ProbDoc.save();
+            res.json('ok');
+        }
     });
 })
 app.post('/submissions',async(req,res)=>{

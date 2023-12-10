@@ -118,7 +118,7 @@ export default function Compiler(props) {
                 setOutput("");
                 setSubmittedAt(new Date());
                 setInput2(inbuiltinput);
-                const { data } = await axios.post("/submit", { language, code, input2 });
+                const { data } = await axios.post("/submit", { language, code, input:inbuiltinput });
                 console.log(data);
                 setJobId(data.jobId);
                 let IntervalId;
@@ -256,6 +256,7 @@ export default function Compiler(props) {
                             extensions={[markdown({ base: markdownLanguage, codeLanguages: languages })]}
                             className="h-96 rounded-md max-h-96 overflow-y-auto" value={code} onChange={(newValue) => setCode(newValue)}
                         />
+                        
                         
                     </div>
                     <div className="flex gap-4">

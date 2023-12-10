@@ -6,7 +6,6 @@ const ProblemSchema = new mongoose.Schema({
     },
     name: {
         type: String,  
-        unique: true
     },
     statement: String,
     inputformat:String,
