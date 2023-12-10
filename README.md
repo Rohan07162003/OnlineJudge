@@ -24,3 +24,22 @@ It currently supports three languages:
 * React.js paired with framer-motion and Codemirror for a responsive and smooth website
 ### - Database:
 * MongoDB Atlas
+## Available Scripts
+**In the project directory**, you can run:  
+
+`cd client`  
+`yarn dev`  
+
+Runs the app-*frontend* in the development mode.  
+Open http://localhost:5173 to view it in your browser. 
+
+The page will reload when you make changes.  
+You may also see any lint errors in the console.  
+
+**In another terminal**  
+
+`cd api`  
+`npm index.js`  
+
+Runs the app-*backend*
+
