@@ -50,16 +50,16 @@ export default function ProfilePage() {
     }
 
     return (
-        <div className="pt-32 bg-gray-900">
+        <div className="pt-32">
 
-            <div className="text-center max-w-large mx-auto text-gray-400">
+            <div className="text-center max-w-large mx-auto text-offwhite">
                 Logged in as {user.name} ({user.email})<br />
                 <button onClick={logout} className="primary max-w-sm mt-2 hover:bg-opacity-95">Logout</button>
             </div>
-            <div class="flex flex-col items-center w-screen min-h-screen bg-gray-900 pb-5 pt-20">
+            <div class="flex flex-col items-center w-screen min-h-screen pb-5 pt-20">
 
 
-                <h1 class="text-lg text-gray-400 font-medium">{user.username} Submissions</h1>
+                <h1 class="text-lg text-offwhite font-medium">{user.username} Submissions</h1>
                 <div class="flex flex-col mt-6">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

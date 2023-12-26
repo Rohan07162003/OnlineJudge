@@ -26,8 +26,8 @@ export default function ProblemSubs({ subs }) {
         <>
             <div class="flex flex-col min-h-screen pb-5 pt-4">
 
-                <div class="flex flex-col">
-                    <div class="-my-2 overflow-x-auto">
+                <div class="flex flex-col max-h-screen">
+                    <div class="-my-2">
                         <div class="py-2 inline-block min-w-full ">
                             <div class="shadow overflow-hidden sm:rounded-lg">
                                 <table class="min-w-full text-sm text-gray-400">

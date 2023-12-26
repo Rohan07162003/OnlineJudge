@@ -211,12 +211,12 @@ export default function Compiler(props) {
         );
     }
     return (
-        <div className="px-1 mt-4 h-screen">
-            <div className="pt-1 mx-2 md:mx-12 border shadow-lg shadow-gray-800 px-2 md:px-8 shadow-md min-h-full bg-zinc-50">
-                <div className="relative">
-                    <div className="border mb-0">
+        <div className="px-1 mt-4 h-100vh">
+            <div className="pt-1 mx-2 md:mx-12 shadow-lg shadow-gray-800 px-2 md:px-8 shadow-md min-h-full bg-gray-800 rounded-md">
+                <div className="relative ">
+                    <div className="mb-0">
                         <button onClick={toggleNavbar} className='mr-20 text-lg px-2 pt-2 pb-1'>
-                            <div className="flex gap-2 items-center px-4 p1-2 bg-white shadow">
+                            <div className="flex gap-2 items-center px-4 py-2 bg-black bg-opacity-20 rounded-md">
                                 <div className="text-base py-1 w-12 flex">
                                     {language === "c" && (
                                         <div>C</div>
@@ -244,10 +244,10 @@ export default function Compiler(props) {
 
                             </div>
                             {IsOpen && (
-                                <div className="flex flex-col justify-between absolute top-28 left-2 z-10 bg-white rounded-l drop-shadow-md shadow w-32 dark:bg-gray-700 dark:divide-gray-600">
-                                    <button value="cpp" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-indigo-100 hover:rounded-sm">C++</button>
-                                    <button value="c" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">C</button>
-                                    <button value="py" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-indigo-100 hover:rounded-sm">Python</button>
+                                <div className="flex flex-col justify-between absolute top-28 left-2 z-10 bg-black bg-opacity-90 rounded-l drop-shadow-md shadow w-32 dark:bg-gray-700 dark:divide-gray-600">
+                                    <button value="cpp" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-gray-600 hover:rounded-sm">C++</button>
+                                    <button value="c" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-gray-600 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">C</button>
+                                    <button value="py" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-gray-600 hover:rounded-sm">Python</button>
                                 </div>
                             )}
                         </button>
@@ -260,28 +260,28 @@ export default function Compiler(props) {
                         
                     </div>
                     <div className="flex gap-4">
-                        <button className="w-24 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={handlerun}>Run</button>
-                        <button className="w-24 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={handlesubmit}>Submit</button>
+                        <button className="w-24 py-2 mt-3 mb-5 text-offwhite bg-zinc-800 rounded-sm" onClick={handlerun}>Run</button>
+                        <button className="w-24 py-2 mt-3 mb-5 text-offwhite bg-zinc-800 rounded-sm" onClick={handlesubmit}>Submit</button>
                     </div>
                     <div>
-                        <span>Custom Input</span>
+                        <span className="py-2">Custom Input</span>
 
-                        <textarea className="h-36 rounded-md border" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
+                        <textarea className="h-36 rounded-md border-none bg-black bg-opacity-20" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
                     </div>
 
-                    <div className="px-3 py-1 border">
+                    <div className="px-3 py-1">
                         {!!status && (
                             <div className="flex gap-3 ">
-                                <div><span className="font-semibold text-gray-800">Status  </span>  {status}</div>
+                                <div><span className="font-semibold text-gray-400">Status  </span>  {status}</div>
                                 <div>{jobId && `JobId  ${jobId}`}</div>
                             </div>
                         )}
 
                     </div>
                     {!!output && (
-                        <div className="bg-white h-52 mb-24 border flex items-center justify-center">
-                            <div className="h-40 w-11/12 bg-yellow-100 opacity-70 p-2 overflow-y-scroll">
-                                <p className="text-black text-base">{output}</p>
+                        <div className="bg-slate-700 h-52 mb-24 flex items-center justify-center">
+                            <div className="h-40 w-11/12 bg-black bg-opacity-20 p-2 overflow-y-auto">
+                                <p className="text-gray-400 text-base">{output}</p>
                             </div>
                         </div>
                     )}

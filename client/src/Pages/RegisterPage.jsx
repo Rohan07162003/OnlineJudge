@@ -45,7 +45,7 @@ export default function RegisterPage() {
                     <button className="primary">Register</button>
                     <div className="text-center py-2 text-gey-400">
                         Already signed up?
-                        <Link className="underline text-black" to={'/login'}>Login</Link>
+                        <Link className="underline text-primary-text" to={'/login'}>Login</Link>
                     </div>
                 </form>
             </div>

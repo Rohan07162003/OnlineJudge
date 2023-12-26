@@ -7,13 +7,17 @@
       --color-secondary: #5b5dc8;
       --color-heading: #dcff50;
       --color-text: rgba(255, 255, 255, 0.6);
-      --color-background: #090909;
+      /* --color-background: #090909; */
   
       
     }
+    html{
+      @apply bg-background1 font-sans text-offwhite;
+      /* font-size: 62.5%; */
+    }
   }
 input[type="text"],input[type="password"],input[type="email"],textarea,input[type="number"],input[type="tel"]{
-    @apply w-full border my-1 py-2 px-3 rounded-2xl;
+    @apply w-full border my-1 py-2 px-3 rounded-2xl bg-slate-700;
 }
 
 button.primary{

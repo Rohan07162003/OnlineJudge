@@ -89,13 +89,13 @@ export default function CompilePage() {
         );
     }
     return (
-        <div className="px-1 mt-4 h-screen">
+        <div className="px-1 mt-4 bg-white">
             <div className="pt-10 mx-2 md:mx-60 border shadow-lg shadow-gray-800 px-4 md:px-24 shadow-md min-h-full bg-zinc-50">
                 <div className="relative">
                     {preinput('Code, Compile & Run', 'Compile & run your code with online IDE')}
                     <div className="border mb-0">
                         <button onClick={toggleNavbar} className='mr-20 text-lg px-2 pt-2 pb-1'>
-                            <div className="flex gap-2 items-center px-4 p1-2 bg-white shadow">
+                            <div className="flex gap-2 items-center px-4 p1-2 bg-slate-700 shadow">
                                 <div className="text-base py-1 w-12 flex">
                                     {language === "c" && (
                                         <div>C</div>
@@ -123,10 +123,10 @@ export default function CompilePage() {
 
                             </div>
                             {IsOpen && (
-                                <div className="flex flex-col justify-between absolute top-28 left-2 z-10 bg-white rounded-l drop-shadow-md shadow w-32 dark:bg-gray-700 dark:divide-gray-600">
-                                    <button value="cpp" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-indigo-100 hover:rounded-sm">C++</button>
-                                    <button value="c" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-indigo-100 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">C</button>
-                                    <button value="py" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-indigo-100 hover:rounded-sm">Python</button>
+                                <div className="flex flex-col justify-between absolute top-28 left-2 z-10 bg-slate-700 rounded-l drop-shadow-md shadow w-32 dark:bg-gray-700 dark:divide-gray-600">
+                                    <button value="cpp" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-slate-900 hover:rounded-sm">C++</button>
+                                    <button value="c" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-slate-900 hover:rounded-sm dark:hover:bg-gray-600 dark:hover:text-white">C</button>
+                                    <button value="py" onClick={ev => setLanguage(ev.target.value)} className="flex block text-sm px-5 py-1 hover:bg-slate-900 hover:rounded-sm">Python</button>
                                 </div>
                             )}
                         </button>
@@ -140,7 +140,7 @@ export default function CompilePage() {
                     <button className="w-20 py-2 mt-3 mb-5 text-white bg-zinc-800 rounded-sm" onClick={handlesubmit}>Run</button>
                     <div>
                         <span>Custom Input</span>
-                        <textarea className="h-36 rounded-md border" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
+                        <textarea className="h-36 rounded-md border bg-white" value={input} onChange={ev => setInput(ev.target.value)}></textarea>
                     </div>
                     <div className="px-3 py-1 border">
                         {{ status } && (
