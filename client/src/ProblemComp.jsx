@@ -3,7 +3,7 @@ export default function ProblemComp({ prob }) {
     const sampleOutputLines = prob.sampleOutput.split('\n').filter(line => line.trim() !== '');
     return (
         <>
-            <div className="min-h-screen overflow-y-auto bg-gray-800 rounded-xl text-gray-400 px-4 pb-4">
+            <div className="min-h-screen overflow-y-auto bg-gray-800 rounded-xl text-gray-400 px-4 pb-4 mt-4">
                 <h1 className="md:text-2xl text-lg font-semibold pt-4 pb-4">Problem</h1>
                 <p className="text-sm md:text-base">{prob.statement}</p>
                 <h1 className="md:text-2xl text-lg font-semibold py-4">Input Format</h1>

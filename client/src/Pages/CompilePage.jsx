@@ -95,8 +95,8 @@ export default function CompilePage() {
                     {preinput('Code, Compile & Run', 'Compile & run your code with online IDE')}
                     <div className="border mb-0">
                         <button onClick={toggleNavbar} className='mr-20 text-lg px-2 pt-2 pb-1'>
-                            <div className="flex gap-2 items-center px-4 p1-2 bg-slate-700 shadow">
-                                <div className="text-base py-1 w-12 flex">
+                            <div className="flex gap-2 items-center px-4 p1-2 shadow">
+                                <div className="text-base text-black py-1 w-12 flex">
                                     {language === "c" && (
                                         <div>C</div>
                                     )}

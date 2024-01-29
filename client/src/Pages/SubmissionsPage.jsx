@@ -38,7 +38,7 @@ export default function SubmissionsPage() {
     return (
         <div>
             <div>
-                <div className="text-center text-lg text-gray-600 font-medium pb-4 pt-10">Submissions</div>
+                <div className="text-center text-lg text-offwhite font-medium pb-4 pt-10">Submissions</div>
                 <div class="flex flex-col min-h-screen pb-5 pt-4">
 
                     <div class="flex flex-col">
@@ -76,7 +76,7 @@ export default function SubmissionsPage() {
                                                         {formatDateTimeWithDefaultTimeZone(submissions.submittedAt)}
                                                     </td>
                                                     <td class="px-3 lg:px-9 py-4 whitespace-nowrap">
-                                                        {submissions.owner}
+                                                        <Link to={`/profile/${submissions.owner}`}>{submissions.owner}</Link>
                                                     </td>
                                                     <td class="px-3 lg:px-9 py-4 whitespace-nowrap">
 

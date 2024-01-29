@@ -252,6 +252,10 @@ app.get('/problemsubmissions',async(req,res)=>{
     const probid=req.query.id;
     res.json(await Submission.find({problemid:probid}));
 });
+app.get('/otherusersubmissions',async(req,res)=>{
+    const name=req.query.name;
+    res.json(await Submission.find({owner:name}));
+});
 /*
 exports.loadSubmissionsByProblemname = async (req, res) => {
     const problemID = req.params.id

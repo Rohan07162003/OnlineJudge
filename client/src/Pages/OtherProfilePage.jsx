@@ -1,5 +1,5 @@
+
 import { useContext, useState, useEffect } from "react"
-import { UserContext } from "../UserContext"
 import { Link, Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 function formatDateTimeWithDefaultTimeZone(inputDateStr) {
@@ -22,46 +22,26 @@ function formatDateTimeWithDefaultTimeZone(inputDateStr) {
     return formattedDateTime;
 }
 
-export default function ProfilePage() {
+export default function OtherProfilePage() {
     const [redirect, setRedirect] = useState(null);
-    const { ready, user, setUser } = useContext(UserContext);
     const [subs, setsubs] = useState([]);
+    const { name } = useParams();
     useEffect(() => {
-        axios.get('/user-submissions').then(({ data }) => {
+      
+        axios.get('/otherusersubmissions', { params: { name: name } }).then(({ data }) => {
             setsubs(data);
         });
     }, []);
-    async function logout() {
-        await axios.post('/logout');
-        setRedirect('/');
-        setUser(null);
-    }
-    if (!ready) {
-        return 'Loading..';
-    }
-    if (ready && !user && !redirect) {
-        return <Navigate to={'/login'} />
-    }
-
-
-
-    if (redirect) {
-        return <Navigate to={redirect} />
-    }
+    
 
     return (
         <div className="pt-32">
 
-            {user && (
-                <div className="text-center max-w-large mx-auto text-offwhite">
-                    Logged in as {user.name} ({user.email})<br />
-                    <button onClick={logout} className="primary max-w-sm mt-2 hover:bg-opacity-95">Logout</button>
-                </div>
-            )}
+            
             <div class="flex flex-col items-center w-screen min-h-screen pb-5 pt-20">
 
 
-                <h1 class="text-lg text-offwhite font-medium">{user.username} Submissions</h1>
+                <h1 class="text-lg text-offwhite font-medium">{name} Submissions</h1>
                 <div class="flex flex-col mt-6">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

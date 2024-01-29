@@ -61,11 +61,12 @@ export default function ProblemSubs({ subs }) {
                                                     {formatDateTimeWithDefaultTimeZone(submissions.submittedAt)}
                                                 </td>
                                                 <td class="px-3 lg:px-9 py-4 whitespace-nowrap">
-                                                    {submissions.owner}
+                                                <Link to={`/profile/${submissions.owner}`}>{submissions.owner}</Link>
+                                                    
                                                 </td>
                                                 <td class="px-3 lg:px-9 py-4 whitespace-nowrap">
-
-                                                    {submissions.name}
+                                                <Link to={`/problem/${submissions.problemid}`}>{submissions.name}</Link>
+                                                    
                                                 </td>
                                                 <td class="px-3 lg:px-9 py-4 whitespace-nowrap">
                                                     {submissions.language}
