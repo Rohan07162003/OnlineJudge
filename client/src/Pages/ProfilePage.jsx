@@ -25,6 +25,7 @@ function formatDateTimeWithDefaultTimeZone(inputDateStr) {
 export default function ProfilePage() {
     const [redirect, setRedirect] = useState(null);
     const { ready, user, setUser } = useContext(UserContext);
+    const [userdata, setUserdata] = useState([]);
     const [subs, setsubs] = useState([]);
     useEffect(() => {
         axios.get('/user-submissions').then(({ data }) => {
@@ -48,6 +49,18 @@ export default function ProfilePage() {
     if (redirect) {
         return <Navigate to={redirect} />
     }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('/userprofile', { params: { name: user.username } });
+                setUserdata(response.data.length > 0 ? response.data[0] : null);
+            } catch (error) {
+                console.error(error);
+                // Handle error
+            }
+        };
+        fetchData();
+    }, [name]);
 
     return (
         <div className="pt-32">
@@ -61,7 +74,9 @@ export default function ProfilePage() {
             <div class="flex flex-col items-center w-screen min-h-screen pb-5 pt-20">
 
 
-                <h1 class="text-lg text-offwhite font-medium">{user.username} Submissions</h1>
+                <h1 class="text-lg text-offwhite font-medium">{user.username} Submissions </h1>
+                <h1 class="text-lg text-offwhite font-medium block">Number of submissions {userdata.numberOfSubmissions}</h1>
+                <h1 class="text-lg text-offwhite font-medium block">Number of solves {userdata.numberOfSolves}</h1>
                 <div class="flex flex-col mt-6">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

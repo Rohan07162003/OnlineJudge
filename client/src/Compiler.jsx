@@ -160,7 +160,7 @@ export default function Compiler(props) {
                             console.log(result);
 
                         }
-
+                        await axios.put('/updatesubs', { problemid, userid: user._id })
 
                     } else {
                         setStatus("Error:Please retry!");

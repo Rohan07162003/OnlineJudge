@@ -178,7 +178,7 @@ app.post('/logout', (req, res) => {
 });
 app.post('/problems',(req,res)=>{
     const{token} = req.cookies;
-    const {name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput}=req.body;
+    const {name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput,difficulty}=req.body;
     jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
         if(err) throw err;
         const problemDoc =await Problem.create({
@@ -190,23 +190,33 @@ app.post('/problems',(req,res)=>{
             sampleInput,
             sampleOutput,
             inbuiltinput,
-            inbuiltoutput
+            inbuiltoutput,
+            difficulty
         })
         res.json(problemDoc);
     });
 })
 app.put('/problems',async(req,res)=>{
     const{token} = req.cookies;
-    const {id,name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput}=req.body;
+    const {id,name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput,difficulty}=req.body;
     jwt.verify(token, jwtSecret, {}, async(err, userData)=>{
         const ProbDoc=await Problem.findById(id)
         if(err) throw err;
         if(userData.id=== ProbDoc.owner.toString()){
-            ProbDoc.set({name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput});
+            ProbDoc.set({name,statement,inputformat,outputformat,sampleInput,sampleOutput,inbuiltinput,inbuiltoutput,difficulty});
             await ProbDoc.save();
             res.json('ok');
         }
     });
+})
+app.put('/updatesubs',async(req,res)=>{
+    const {problemid,userid}=req.body;
+    try{
+        const userrDoc=await User.findOneAndUpdate({_id: userid}, {$inc: {numberOfSubmissions: 1}}, {new: true});
+        res.json(userrDoc);
+    }catch(e){
+        res.status(422).json(e)
+    }
 })
 app.post('/submissions',async(req,res)=>{
     const { owner,name,language,result,submittedAt,problemid} = req.body;
@@ -255,6 +265,10 @@ app.get('/problemsubmissions',async(req,res)=>{
 app.get('/otherusersubmissions',async(req,res)=>{
     const name=req.query.name;
     res.json(await Submission.find({owner:name}));
+});
+app.get('/userprofile',async(req,res)=>{
+    const name=req.query.name;
+    res.json(await User.find({username:name}));
 });
 /*
 exports.loadSubmissionsByProblemname = async (req, res) => {

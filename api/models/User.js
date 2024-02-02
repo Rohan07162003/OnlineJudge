@@ -6,6 +6,18 @@ const UserSchema= new Schema({
     username:{type:String,unique:true},
     role:String,
     password:String,
+    numberOfSolves: {
+        type: Number,
+        default: 0
+    },
+    numberOfSubmissions: {
+        type: Number,
+        default: 0        
+    },
+    problemsSolved: {
+        type: [String],
+        default: []
+    }
 });
 
 const User = mongoose.model('User',UserSchema);

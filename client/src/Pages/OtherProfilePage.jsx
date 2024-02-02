@@ -25,23 +25,38 @@ function formatDateTimeWithDefaultTimeZone(inputDateStr) {
 export default function OtherProfilePage() {
     const [redirect, setRedirect] = useState(null);
     const [subs, setsubs] = useState([]);
+    const [userdata, setUserdata] = useState([]);
     const { name } = useParams();
     useEffect(() => {
-      
+
         axios.get('/otherusersubmissions', { params: { name: name } }).then(({ data }) => {
             setsubs(data);
         });
     }, []);
-    
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('/userprofile', { params: { name: name } });
+                setUserdata(response.data.length > 0 ? response.data[0] : null);
+            } catch (error) {
+                console.error(error);
+                // Handle error
+            }
+        };
+        fetchData();
+    }, [name]);
+
 
     return (
         <div className="pt-32">
 
-            
+
             <div class="flex flex-col items-center w-screen min-h-screen pb-5 pt-20">
 
 
                 <h1 class="text-lg text-offwhite font-medium">{name} Submissions</h1>
+                <h1 class="text-lg text-offwhite font-medium block">Number of submissions {userdata.numberOfSubmissions}</h1>
+                <h1 class="text-lg text-offwhite font-medium block">Number of solves {userdata.numberOfSolves}</h1>
                 <div class="flex flex-col mt-6">
                     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">

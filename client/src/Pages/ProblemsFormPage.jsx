@@ -11,6 +11,7 @@ export default function ProblemsFormPage() {
     const [outputformat, setOutputformat] = useState('');
     const [inbuiltinput, setInbuiltinput] = useState('');
     const [inbuiltoutput, setInbuiltoutput] = useState('');
+    const [difficulty, setDifficulty] = useState('easy');
     const [redirect, setRedirect] = useState(false);
     useEffect(()=>{
         if(!id)return;
@@ -24,11 +25,12 @@ export default function ProblemsFormPage() {
             setOutputformat(data.outputformat);
             setInbuiltinput(data.inbuiltinput);
             setInbuiltoutput(data.inbuiltoutput);
+            setDifficulty(data.difficulty);
         })
     },[id])
     async function saveProb(ev) {
         ev.preventDefault();
-        const problemdata={name, statement,inputformat,outputformat, sampleInput, sampleOutput,inbuiltinput,inbuiltoutput}
+        const problemdata={name, statement,inputformat,outputformat, sampleInput, sampleOutput,inbuiltinput,inbuiltoutput,difficulty}
         if(id){
             try {
                 await axios.put('/problems', {id,...problemdata});
@@ -68,6 +70,8 @@ export default function ProblemsFormPage() {
                 <textarea placeholder="2nd test case" className="h-48 md:h-32 " value={inbuiltinput} onChange={ev => setInbuiltinput(ev.target.value)}></textarea>
                 <h2 className="text-2xl mt-4">Test Case 2 Output</h2>
                 <textarea placeholder="2nd test case" className="h-48 md:h-32 " value={inbuiltoutput} onChange={ev => setInbuiltoutput(ev.target.value)}></textarea>
+                <h2 className="text-2xl mt-4">Difficulty</h2>
+                <textarea placeholder="easy/medium/hard" className="h-48 md:h-32 " value={difficulty} onChange={ev => setDifficulty(ev.target.value)}></textarea>
                 <button className="primary my-4 hover:bg-opacity-95">Save</button>
             </form>
         </div>

@@ -19,6 +19,18 @@ const ProblemSchema = new mongoose.Schema({
     inbuiltoutput:{
         type: String,
         required: true,
+    },
+    difficulty: {
+        type: String, 
+        default: "Easy"
+    },
+    numberOfSolves: {
+        type: Number,
+        default: 0
+    },
+    solvers: {
+        type: [String],
+        default: []    
     }
 })
 const Problem = mongoose.model('Problem',ProblemSchema);
